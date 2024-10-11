@@ -29,7 +29,7 @@ export const SearchTasks = () => {
   }, [debouncedTerm, setSearchTerm]);
 
   return (
-    <div>
+    <div className="w-full">
       <SearchBar value={searchInput} onChange={handleChange} />
     </div>
   );
