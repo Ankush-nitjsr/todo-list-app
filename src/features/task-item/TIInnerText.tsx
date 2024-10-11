@@ -4,7 +4,7 @@ import { Task } from "../../types/Task";
 interface TIInnerTextProps {
   task: Task;
   isEditing: boolean;
-  onUpdateTask: (updatedText: string) => void; // Callback to handle task updates
+  onUpdateTask: (taskToUpdate: Task, updatedText: string) => void;
 }
 
 export const TIInnerText = ({
@@ -13,7 +13,7 @@ export const TIInnerText = ({
   onUpdateTask,
 }: TIInnerTextProps) => {
   const [updatedTaskText, setUpdatedTaskText] = useState(task.task);
-  const inputRef = useRef<HTMLInputElement>(null); // Reference to the input
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Focus on the input when entering edit mode
   useEffect(() => {
@@ -23,12 +23,12 @@ export const TIInnerText = ({
   }, [isEditing]);
 
   const handleSave = () => {
-    onUpdateTask(updatedTaskText); // Call the passed function to update the task
+    onUpdateTask(task, updatedTaskText);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      handleSave(); // Save when pressing Enter
+      handleSave();
     }
   };
 
@@ -39,9 +39,9 @@ export const TIInnerText = ({
           ref={inputRef} // Set focus to this input when in edit mode
           type="text"
           value={updatedTaskText}
-          onChange={(e) => setUpdatedTaskText(e.target.value)} // Handle text change
-          onBlur={handleSave} // Save when input loses focus
-          onKeyDown={handleKeyPress} // Handle Enter key to save
+          onChange={(e) => setUpdatedTaskText(e.target.value)}
+          onBlur={handleSave}
+          onKeyDown={handleKeyPress}
           className="edit-input"
         />
       ) : (
