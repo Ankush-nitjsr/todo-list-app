@@ -14,7 +14,7 @@ const AddTask = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="add-task-form flex flex-col w-3/4 space-y-4"
+      className="add-task-form flex flex-col w-full space-y-4 my-4"
     >
       <input
         type="text"
