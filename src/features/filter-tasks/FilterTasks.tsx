@@ -1,25 +1,32 @@
 import { useTasks } from "../../context/TaskContext";
 
 export const FilterTasks = () => {
-  const { setFilter } = useTasks();
+  // Get filter and setFilter state from context
+  const { filter, setFilter } = useTasks();
+
+  const getButtonClass = (filterType: string) => {
+    return filter === filterType
+      ? "bg-green-500 text-white px-4 py-1 rounded-md" // Active button style
+      : "bg-gray-500 hover:bg-green-400 text-white px-4 py-1 rounded-md"; // Default button style
+  };
 
   return (
     <div className="space-x-2">
       <button
         onClick={() => setFilter("all")}
-        className="bg-gray-500 hover:bg-green-400 px-4 py-1 rounded-md"
+        className={getButtonClass("all")}
       >
         All
       </button>
       <button
         onClick={() => setFilter("completed")}
-        className="bg-gray-500 hover:bg-green-400 px-4 py-1 rounded-md"
+        className={getButtonClass("completed")}
       >
         Completed
       </button>
       <button
         onClick={() => setFilter("incomplete")}
-        className="bg-gray-500 hover:bg-green-400 px-4 py-1 rounded-md"
+        className={getButtonClass("incomplete")}
       >
         Incomplete
       </button>
