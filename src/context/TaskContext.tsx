@@ -1,20 +1,26 @@
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { Task } from "../types/Task";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface TaskContextProps {
   tasks: Task[];
   setTasks: (tasks: Task[]) => void;
+  filter: string;
+  setFilter: (filter: string) => void;
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
   addTask: (task: string) => void;
   deleteTask: (id: string) => void;
   toggleComplete: (id: string) => void;
-  filterTasks: (filter: string) => Task[];
 }
 
 const TaskContext = createContext<TaskContextProps | undefined>(undefined);
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
+
+  const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const addTask = (task: string) => {
     const newTask: Task = {
@@ -37,23 +43,18 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
-  const filterTasks = (filter: string) => {
-    if (filter === "completed")
-      return tasks.filter((task: Task) => task.completed);
-    if (filter === "incomplete")
-      return tasks.filter((task: Task) => !task.completed);
-    return tasks;
-  };
-
   return (
     <TaskContext.Provider
       value={{
         tasks,
         setTasks,
+        filter,
+        setFilter,
+        searchTerm,
+        setSearchTerm,
         addTask,
         deleteTask,
         toggleComplete,
-        filterTasks,
       }}
     >
       {children}
