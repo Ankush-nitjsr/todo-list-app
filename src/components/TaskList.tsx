@@ -6,13 +6,15 @@ export const TaskList = () => {
   const { filteredTasks } = useFilterAndSearchTasks();
 
   return (
-    <div className="tasks-list space-y-4 flex flex-col justify-center items-center w-full">
-      {filteredTasks === null ? (
+    <div className="tasks-list min-h-[330px] space-y-4 flex flex-col w-full">
+      {filteredTasks === null || filteredTasks.length === 0 ? (
         <p>No tasks available</p>
       ) : (
-        filteredTasks.map((task: Task) => (
-          <TaskItem key={task.id} task={task} />
-        ))
+        // Reverse the task list to display the latest task at the top
+        filteredTasks
+          .slice()
+          .reverse()
+          .map((task: Task) => <TaskItem key={task.id} task={task} />)
       )}
     </div>
   );
