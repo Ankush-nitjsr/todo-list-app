@@ -6,12 +6,12 @@ export const FilterTasks = () => {
 
   const getButtonClass = (filterType: string) => {
     return filter === filterType
-      ? "bg-green-500 text-white px-4 py-1 rounded-md" // Active button style
-      : "bg-gray-500 hover:bg-green-400 text-white px-4 py-1 rounded-md"; // Default button style
+      ? "bg-green-700 text-white px-4 py-1 rounded-md" // Active button style
+      : "bg-gray-500 hover:bg-green-500 text-white px-4 py-1 rounded-md"; // Default button style
   };
 
   return (
-    <div className="space-x-2">
+    <div className="flex space-x-2">
       <button
         onClick={() => setFilter("all")}
         className={getButtonClass("all")}
