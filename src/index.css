@@ -10,8 +10,8 @@
   --blue: #3a80e9;
   --grey: #888;
   --darkgrey: #1b1b1b;
-  --green-light: #28a745;
-  --green-dark: #218838;
+  --green-light: #22c55e;
+  --green-dark: #15803d;
   --red: #f94141;
 }
 
@@ -34,6 +34,6 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--blue);
+  background: var(--green-dark);
   border-radius: 10px;
 }
