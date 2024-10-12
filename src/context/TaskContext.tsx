@@ -12,12 +12,18 @@ interface TaskContextProps {
   addTask: (task: string) => void;
   deleteTask: (id: string) => void;
   toggleComplete: (id: string) => void;
+  history: Task[][];
+  future: Task[][];
+  undo: () => void;
+  redo: () => void;
 }
 
 const TaskContext = createContext<TaskContextProps | undefined>(undefined);
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
   const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", []);
+  const [history, setHistory] = useState<Task[][]>([]); // Array of previous task states for undo
+  const [future, setFuture] = useState<Task[][]>([]); // Array of future task states for redo
 
   const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,19 +34,43 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
       task,
       completed: false,
     };
-    setTasks([...tasks, newTask]);
+    setHistory([...history, tasks]); // Save the current state to history
+    setTasks([newTask, ...tasks]); // Add the new task to the top
+    setFuture([]); // Clear future states
   };
 
   const deleteTask = (id: string) => {
-    setTasks(tasks.filter((task: Task) => task.id !== id));
+    setHistory([...history, tasks]); // Save current state to history
+    setTasks(tasks.filter((task: Task) => task.id !== id)); // Remove task
+    setFuture([]); // Clear future states
   };
 
   const toggleComplete = (id: string) => {
+    setHistory([...history, tasks]); // Save current state to history
     setTasks(
       tasks.map((task: Task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
+    setFuture([]); // Clear future states
+  };
+
+  const undo = () => {
+    if (history.length > 0) {
+      const previousState = history[history.length - 1];
+      setFuture([tasks, ...future]); // Save current state to future
+      setTasks(previousState); // Restore the previous state
+      setHistory(history.slice(0, -1)); // Remove the last state from history
+    }
+  };
+
+  const redo = () => {
+    if (future.length > 0) {
+      const nextState = future[0];
+      setHistory([...history, tasks]); // Save current state to history
+      setTasks(nextState); // Restore the next state
+      setFuture(future.slice(1)); // Remove the first state from future
+    }
   };
 
   return (
@@ -55,6 +85,10 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         addTask,
         deleteTask,
         toggleComplete,
+        history,
+        future,
+        undo,
+        redo,
       }}
     >
       {children}
